@@ -1,36 +1,36 @@
 import { useState } from 'react';
-import data from './data';
+import people from './data';
 import Review from './components/Review';
 import { FaAngleLeft, FaAngleRight } from 'react-icons/fa6';
 
 const App = () => {
-  const [reviews, setReviews] = useState(data);
   const [displayedIndex, setDisplayedIndex] = useState(0);
 
   const showPrev = () => {
-    const nextIndex = !displayedIndex ? reviews.length - 1 : displayedIndex - 1;
-    setDisplayedIndex(nextIndex);
+    setDisplayedIndex((currentIndex) => {
+      const nextIndex = (currentIndex + people.length - 1) % people.length;
+      return nextIndex;
+    });
   };
 
   const showNext = () => {
-    let nextIndex = displayedIndex + 1;
-    if (nextIndex === reviews.length) {
-      nextIndex = 0;
-    }
-    setDisplayedIndex(nextIndex);
+    setDisplayedIndex((currentIndex) => {
+      const nextIndex = (currentIndex + 1) % people.length;
+      return nextIndex;
+    });
   };
 
   const showRandom = () => {
     let nextIndex = displayedIndex;
     while (nextIndex === displayedIndex) {
-      nextIndex = Math.floor(Math.random() * reviews.length);
+      nextIndex = Math.floor(Math.random() * people.length);
     }
     setDisplayedIndex(nextIndex);
   };
 
   return (
     <main>
-      <Review review={reviews[displayedIndex]} />
+      <Review review={people[displayedIndex]} />
       <div className='navButtons'>
         <FaAngleLeft className='navButton' onClick={showPrev} />
         <FaAngleRight className='navButton' onClick={showNext} />
